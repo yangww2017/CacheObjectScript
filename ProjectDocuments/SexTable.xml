@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2020.1 (Build 215U)" ts="2021-02-24 17:51:56">
+<Document name="SexTable.LUT">
+<lookupTable>
+<entry table="SexTable" key="0">Other</entry>
+<entry table="SexTable" key="1">Male</entry>
+<entry table="SexTable" key="2">Female</entry>
+<entry table="SexTable" key="F">Female</entry>
+<entry table="SexTable" key="M">Male</entry>
+<entry table="SexTable" key="O">Other</entry>
+</lookupTable>
+</Document></Export>

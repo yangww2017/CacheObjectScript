@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2020.1 (Build 215U)" ts="2021-02-24 17:51:47">
+<Document name="ProfessionTable.LUT">
+<lookupTable>
+<entry table="ProfessionTable" key="001">Teacher</entry>
+<entry table="ProfessionTable" key="002">Student</entry>
+<entry table="ProfessionTable" key="003">Farmer</entry>
+<entry table="ProfessionTable" key="01001">Teacher</entry>
+<entry table="ProfessionTable" key="01002">Student</entry>
+<entry table="ProfessionTable" key="01003">Farmer</entry>
+</lookupTable>
+</Document></Export>

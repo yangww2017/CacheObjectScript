@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2020.1 (Build 215U)" ts="2021-02-25 18:22:32">
+<Class name="DEMO.DictNormalize">
+<Description>
+Classname DEMO.DictNormalize
+Version   1.0
+Date      2021-02-22 18:00:00
+Author    yangweiwei</Description>
+<Super>%Persistent</Super>
+<TimeChanged>65800,66136.091562</TimeChanged>
+<TimeCreated>65797,59675.965656</TimeCreated>
+
+<Method name="Normalize">
+<Description>
+tableName is the target table name
+IDStart is the specified starting ID
+IDEnd is the specified end ID
+IDStart and IDEnd defined the range of records</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>tableName:%String,IDStart:%String="",IDEnd:%String=""</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	try{
+		Set ^Step($zdt($H,3,1),1)="Carry out preparatory work"
+		//lookup Compilation information
+		&sql(select Name into :tClass from %Dictionary.CompiledClass where SqlTableName= :tableName and SqlSchemaName='SQLUser')
+		Return:(SQLCODE '= 0) $$$ERROR($$$GeneralError,"Class corresponding to "_tableName_" not found ")	
+		Set tStorage=tClass_"||Default"
+	
+		//lookup Global Name
+		&SQL(SELECT DataLocation into :DLGlobal
+			FROM %Dictionary.CompiledStorage
+			WHERE parent = :tClass)
+		Return:(SQLCODE '= 0) $$$ERROR($$$GeneralError,"Class corresponding to "_tableName_" not found ")	
+	
+		Set ^Step($zdt($H,3,1),2)=DLGlobal
+		//1、Determine which fields in the data table need dictionary comparison
+		Set dictMapItem= $O(^Ens.LookupTable(tableName,""))
+		while dictMapItem'=""{
+			//Determines the position of the specified field in the table
+			&SQL(SELECT Name into :tPosition
+				FROM %Dictionary.CompiledStorageDataValue
+			 	WHERE parent %Startswith :tStorage
+				AND Value=:dictMapItem)
+			Return:(SQLCODE '= 0) $$$ERROR($$$GeneralError,"can not find "_tableName_" item "_dictMapItem_"In the corresponding storage location")	
+			Set dictMap(dictMapItem)=tPosition
+			Set dictMapItem= $O(^Ens.LookupTable(tableName,dictMapItem))
+		}
+	
+		// Confirm data copy range
+		// if IDStart is empty, means to the start of global
+		Set:(IDStart="") IDStart=$O(@DLGlobal@(""),1)
+		// if IDEnd is empty, means to the end of global
+		Set:(IDEnd="") IDEnd=$O(@DLGlobal@(""),-1)
+
+		If (IDStart="")
+		{
+			Return $$$ERROR($$$GeneralError,"table "_tableName_" is empty")
+		}
+	
+		Set ^Step($zdt($H,3,1),4)="Start dictionary comparison"
+		//Traverse each record in the table at the global
+		Set tIterator=$Order(@DLGlobal@(IDStart-1))
+		While (tIterator '="") && (tIterator<=IDEnd)
+		{
+			Set globalTemp=@DLGlobal@(tIterator)
+			Set mapItem=$O(dictMap(""))
+			while mapItem'=""{
+				Set position=dictMap(mapItem)
+				//Take out the original value of the field
+				Set oldData=$List(globalTemp,position)
+				//Find out the new value
+				Set newData=$G(^Ens.LookupTable(^Ens.LookupTable(tableName,mapItem),oldData))
+				//If not, it may be that it is already a standard field,
+				//but there may be no cross reference record added in lookuptable
+				if newData'=""{
+					Set $List(globalTemp,position)=newData
+				}
+				Set mapItem=$O(dictMap(mapItem))
+			}
+			Set @DLGlobal@(tIterator)=globalTemp
+			Set tIterator=$Order(@DLGlobal@(tIterator))	
+		}
+		Set ^Step($zdt($H,3,1),7)="Dictionary comparison completed"
+	}catch ex{
+		Return $$$ERROR($$$GeneralError)	
+	}
+	Quit $$$OK
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DataLocation>^DEMO.DictNormalizeD</DataLocation>
+<DefaultData>DictNormalizeDefaultData</DefaultData>
+<IdLocation>^DEMO.DictNormalizeD</IdLocation>
+<IndexLocation>^DEMO.DictNormalizeI</IndexLocation>
+<StreamLocation>^DEMO.DictNormalizeS</StreamLocation>
+<Data name="DictNormalizeDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+</Export>
