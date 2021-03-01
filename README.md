@@ -7,7 +7,11 @@ The hospital needs to summarize the data of each department to the hospital head
 2.basic environment:
 IRIS for Windows (x86-64) 2020.1 (Build 215U)
 
-3.Deployment steps：
+3.Application Technology:
+
+This example uses the multi model structure of iris to complete the modification of the data table record information from the global level to ensure the high speed and efficiency of modification.
+
+4.Deployment steps：
 
 1)、Create a specified mapping table. The table name is the same as the data table name (in this example, the table name is patinfo). The key field holds the name of the field in the table that needs to be compared, and the value field holds the name of the dictionary mapping table。
 
@@ -68,6 +72,9 @@ More details please refer to README.docx
 
 基本环境：
 IRIS for Windows (x86-64) 2020.1 (Build 215U)
+
+应用技术：
+本样例运用了IRIS的多模型结构，从Global层面上完成对数据表记录信息的修改，保证修改的高速和高效性。
 
 部署步骤：
 
