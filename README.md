@@ -43,6 +43,33 @@ Do ##class(DEMO.DictNormalize).Normalize("PatInfo")
 
 More details please refer to README.docx
 
+5、Installation
+1）install IRIS for Windows (x86-64) 2020.1 (Build 215U);
+2）create a new namespace with the name self-defined, such as:DemoNS;
+3) open Management Protal and switch to "DemoNS" namespace;
+4) enter LookupTable page and import file "PatInfo.xml/ProfessionTable.xml/SexTable.xml";
+5) open studio and switch to "DemoNS" namespace;
+6) import file "DEMO.xml"
+
+6、How to Test it
+1）go to SQL Management page(System > SQL) and switch to "DemoNS" namespace;
+2) create the table patinfo and insert the test data:
+create table PatInfo(
+name varchar(20),
+sex varchar(20),
+age varchar(20),
+profession varchar(20))
+
+insert into PatInfo(name,sex,age,profession) values('zhangsan','1','16','002');
+insert into PatInfo(name,sex,age,profession) values('lisi','1','36','001');
+insert into PatInfo(name,sex,age,profession) values('wangwu','2','26','003');
+insert into PatInfo(name,sex,age,profession) values('zhaoming','F','23','01002');
+insert into PatInfo(name,sex,age,profession) values('zhangliu','M','45','01003');
+insert into PatInfo(name,sex,age,profession) values('cailun','O','45','001')
+3) open Terminal and switch to "DemoNS" namespace;
+4) run:Do ##class(DEMO.DictNormalize).Normalize("PatInfo")
+5) check whether the data in the table patinfo has changed. If it has, it means success
+
 
 
 
